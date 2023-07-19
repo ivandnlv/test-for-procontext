@@ -1,6 +1,7 @@
 <template>
   <div class="list-settings">
     <DropDown
+      checkboxed
       v-for="(list, index) in lists"
       :key="index"
       :title="`List ${index + 1}`"

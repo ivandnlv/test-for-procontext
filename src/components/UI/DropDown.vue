@@ -18,7 +18,7 @@
           fill="black"
         />
       </svg>
-      <input type="checkbox" v-model="checkBox" />
+      <input type="checkbox" v-model="checkBox" v-if="checkboxed" />
       <span class="dropdown__title-text">{{ title }}</span>
     </div>
   </div>
@@ -34,13 +34,14 @@ import { useListsStore, ListsState } from '@/store';
 interface IDropDownProps {
   title: string;
   index: number;
+  checkboxed?: boolean;
 }
 
 const listsStore: ListsState = useListsStore();
 const { changeAllVisibility } = listsStore;
 
 const props = defineProps<IDropDownProps>();
-const { title, index } = toRefs(props);
+const { title, index, checkboxed = false } = toRefs(props);
 
 const checkBox = ref(false);
 const isActive = ref(false);
@@ -90,7 +91,7 @@ watch(checkBox, () => {
   &__content {
     overflow: hidden;
     max-height: 0;
-    padding-left: 50px;
+    padding: 0 50px;
     transition: max-height 0.2s ease-in-out;
     transition: margin 0.2s ease-in-out;
     * {

@@ -9,8 +9,17 @@
       <span>{{ title }}</span>
     </div>
     <div class="list-settings__item-wrapper">
-      <input type="number" class="list-settings__item-number" min="0" />
-      <input type="color" class="list-settings__item-color" />
+      <input
+        type="number"
+        class="list-settings__item-number"
+        min="0"
+        v-model="lists[listIndex][listItemIndex].count"
+      />
+      <input
+        type="color"
+        class="list-settings__item-color"
+        v-model="lists[listIndex][listItemIndex].color"
+      />
     </div>
   </div>
 </template>
