@@ -1,44 +1,64 @@
 <template>
   <div class="dropdown" @click="(e) => onDropdownClick(e)">
     <div class="dropdown__title">
-      <input type="checkbox" />
+      <svg
+        :class="isActive ? '_active' : null"
+        xmlns="http://www.w3.org/2000/svg"
+        width="9"
+        height="7"
+        viewBox="0 0 9 7"
+        fill="none"
+      >
+        <path
+          d="M0 1.73798L0.874823 0.916584L4.98178 5.2907L4.10696 6.11209L0 1.73798Z"
+          fill="black"
+        />
+        <path
+          d="M4.10696 6.11209L3.28557 5.23727L7.65968 1.13031L8.48107 2.00513L4.10696 6.11209Z"
+          fill="black"
+        />
+      </svg>
+      <input type="checkbox" v-model="checkBox" />
       <span class="dropdown__title-text">{{ title }}</span>
     </div>
   </div>
-  <div :class="dropdownContentClass">
+  <div :class="isActive ? 'dropdown__content _active' : 'dropdown__content'">
     <slot></slot>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, toRefs } from 'vue';
-const props = defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-});
-const { title } = toRefs(props);
+import { ref, toRefs, watch } from 'vue';
+import { useListsStore, ListsState } from '@/store';
 
-const dropdownInitialClass = 'dropdown__content';
-const activeClass = '_active';
+interface IDropDownProps {
+  title: string;
+  index: number;
+}
 
-const dropdownContentClass = ref(dropdownInitialClass);
+const listsStore: ListsState = useListsStore();
+const { changeAllVisibility } = listsStore;
+
+const props = defineProps<IDropDownProps>();
+const { title, index } = toRefs(props);
+
+const checkBox = ref(false);
+const isActive = ref(false);
 const onDropdownClick = (e: MouseEvent) => {
   // Проверка нажатия на div или span, для того чтобы механизм dropdown
   // не открывался при нажатии на checkbox
-  if (e.target instanceof HTMLDivElement || e.target instanceof HTMLSpanElement) {
-    if (dropdownContentClass.value.includes(activeClass)) {
-      dropdownContentClass.value = dropdownInitialClass;
-    } else {
-      dropdownContentClass.value += ` ${activeClass}`;
-    }
+  if (!(e.target instanceof HTMLInputElement)) {
+    isActive.value = !isActive.value;
   }
 };
+watch(checkBox, () => {
+  changeAllVisibility(index.value, checkBox.value);
+});
 </script>
 
 <style lang="scss" scoped>
 .dropdown {
+  cursor: pointer;
   position: relative;
   border: 1px solid #000;
   padding: 10px;
@@ -54,10 +74,17 @@ const onDropdownClick = (e: MouseEvent) => {
   }
   &__title {
     display: flex;
+    align-items: center;
     gap: 10px;
     span {
       font-family: 'Roboto';
       cursor: pointer;
+    }
+    svg {
+      transition: transform 0.2s ease-in-out;
+      &._active {
+        transform: rotate(180deg);
+      }
     }
   }
   &__content {
