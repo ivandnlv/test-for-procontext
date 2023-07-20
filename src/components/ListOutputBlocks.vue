@@ -1,5 +1,8 @@
 <template>
-  <div class="output__item-block" v-if="!mixed">
+  <div
+    class="output__item-block"
+    v-if="!mixed && settings[settingsIndex][settingsItemIndex].visibility"
+  >
     <div
       class="block"
       v-for="(_, index) in [...Array(settings[settingsIndex][settingsItemIndex].count)]"
@@ -8,7 +11,7 @@
       :style="{ background: settings[settingsIndex][settingsItemIndex].color }"
     ></div>
   </div>
-  <div class="output__item-block" v-else>
+  <div class="output__item-block" v-else-if="mixed && mixedArr">
     <div
       class="block"
       v-for="(color, index) in mixedArr"
