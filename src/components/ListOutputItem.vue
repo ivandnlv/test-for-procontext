@@ -3,7 +3,11 @@
     <div>
       <div class="output__item-header">
         <span>{{ title }}</span>
-        <MyBtn :title="mix[index - 1] ? 'Сортировать' : 'Перемешать'" :on-btn-click="onMixClick" />
+        <MyBtn
+          v-if="isVisible"
+          :title="mix[index - 1] ? 'Сортировать' : 'Перемешать'"
+          :on-btn-click="onMixClick"
+        />
       </div>
       <div class="output__item-content" v-if="isVisible && !mix[index - 1]">
         <div style="margin-top: 20px">
