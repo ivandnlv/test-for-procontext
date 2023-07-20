@@ -4,6 +4,7 @@
       class="block"
       v-for="(_, index) in [...Array(settings[settingsIndex][settingsItemIndex].count)]"
       :key="index"
+      @click="onBlockClick"
       :style="{ background: settings[settingsIndex][settingsItemIndex].color }"
     ></div>
   </div>
@@ -29,11 +30,15 @@ interface ListOutputItemProps {
 
 const props = defineProps<ListOutputItemProps>();
 
-const { settingsIndex, settingsItemIndex = 0, mixed = false } = toRefs(props);
+const { settingsIndex, settingsItemIndex, mixed = false } = toRefs(props);
 
 const settingsStore: SettingsStore = useSettingsStore();
 
-const { settings } = settingsStore;
+const { settings, deleteBlock } = settingsStore;
+
+const onBlockClick = () => {
+  deleteBlock(settingsIndex.value, settingsItemIndex.value);
+};
 
 const mixedArr = ref<string[] | null>(null);
 

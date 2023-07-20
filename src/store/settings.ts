@@ -12,7 +12,7 @@ interface ISettingsActions {
   changeVisibility: (settingsIndex: number, settingsItemIndex: number, value: boolean) => void;
   changeAllVisibility: (settingsIndex: number, value: boolean) => void;
   changeMix: (settingsIndex: number, value: boolean) => void;
-  disableMix: () => void;
+  deleteBlock: (settingsIndex: number, settingsItemIndex: number) => void;
 }
 interface ISettingsState {
   settings: ISettingsItem[][];
@@ -68,10 +68,8 @@ export const useSettingsStore = defineStore('settings', {
     changeMix(settingIndex: number, value: boolean) {
       this.mix[settingIndex - 1] = value;
     },
-    disableMix() {
-      this.mix.forEach((mixItem) => {
-        mixItem = false;
-      });
+    deleteBlock(settingIndex: number, settingsItemIndex: number) {
+      this.settings[settingIndex][settingsItemIndex].count -= 1;
     },
   },
 });
