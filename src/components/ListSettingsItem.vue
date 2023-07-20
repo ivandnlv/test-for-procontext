@@ -4,7 +4,7 @@
       <input
         type="checkbox"
         class="list-settings__item-checkbox"
-        v-model="lists[listIndex][listItemIndex].visibility"
+        v-model="settings[settingsIndex][settingsItemIndex].visibility"
       />
       <span>{{ title }}</span>
     </div>
@@ -13,33 +13,40 @@
         type="number"
         class="list-settings__item-number"
         min="0"
-        v-model="lists[listIndex][listItemIndex].count"
+        v-model="settings[settingsIndex][settingsItemIndex].count"
       />
       <input
         type="color"
         class="list-settings__item-color"
-        v-model="lists[listIndex][listItemIndex].color"
+        v-model="settings[settingsIndex][settingsItemIndex].color"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ListsState, useListsStore } from '@/store';
-import { toRefs } from 'vue';
+import { SettingsStore, useSettingsStore } from '@/store/settings';
+import { toRefs, watch } from 'vue';
 
 interface IListSettingsItemProps {
   title: string;
-  listIndex: number;
-  listItemIndex: number;
+  settingsIndex: number;
+  settingsItemIndex: number;
 }
 
-const listsStore: ListsState = useListsStore();
-const { lists } = listsStore;
+const settingsStore: SettingsStore = useSettingsStore();
+const { settings, disableMix } = settingsStore;
 
 const props = defineProps<IListSettingsItemProps>();
 
-const { title } = toRefs(props);
+const { title, settingsIndex, settingsItemIndex } = toRefs(props);
+watch(
+  settings[settingsIndex.value],
+  () => {
+    disableMix();
+  },
+  { deep: true },
+);
 </script>
 
 <style lang="scss" scoped>

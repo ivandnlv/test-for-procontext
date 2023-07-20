@@ -1,31 +1,35 @@
 <template>
-  <div class="list-settings">
+  <div class="settings">
     <DropDown
       checkboxed
-      v-for="(list, index) in lists"
+      v-for="(option, index) in settings"
       :key="index"
       :title="`List ${index + 1}`"
       :index="index"
     >
       <ListSettingsItem
-        v-for="(item, i) in list"
+        v-for="(_, i) in option"
         :key="i"
-        :list-index="index"
-        :list-item-index="i"
-        :title="`Item ${i}`"
+        :settings-index="index"
+        :settings-item-index="i"
+        :title="`Item ${i + 1}`"
       />
     </DropDown>
   </div>
 </template>
 
 <script lang="ts" setup>
-import DropDown from './UI/DropDown.vue';
+import DropDown from './UI/DropDown/DropDown.vue';
 import ListSettingsItem from './ListSettingsItem.vue';
-import { useListsStore, ListsState } from '../store/index';
+import { SettingsStore, useSettingsStore } from '../store/settings';
 
-const listsStore: ListsState = useListsStore();
-const { lists } = listsStore;
+const listsStore: SettingsStore = useSettingsStore();
+const { settings } = listsStore;
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style lang="scss" scoped>
+.settings {
+  padding: 60px;
+}
+</style>
