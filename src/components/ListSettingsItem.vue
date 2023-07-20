@@ -13,7 +13,9 @@
         type="number"
         class="list-settings__item-number"
         min="0"
-        v-model="settings[settingsIndex][settingsItemIndex].count"
+        :max="numberMax"
+        @input="onNumberInput"
+        v-model.number="settings[settingsIndex][settingsItemIndex].count"
       />
       <input
         type="color"
@@ -34,12 +36,25 @@ interface IListSettingsItemProps {
   settingsItemIndex: number;
 }
 
+const numberMax = 1000;
+
 const settingsStore: SettingsStore = useSettingsStore();
 const { settings } = settingsStore;
 
 const props = defineProps<IListSettingsItemProps>();
 
 const { title, settingsIndex, settingsItemIndex } = toRefs(props);
+
+const onNumberInput = (e: Event) => {
+  if (e.target instanceof HTMLInputElement) {
+    if (+e.target.value >= numberMax) {
+      e.target.value = numberMax.toString();
+      settings[settingsIndex.value][settingsItemIndex.value].count = parseInt(e.target.value);
+    } else {
+      settings[settingsIndex.value][settingsItemIndex.value].count = parseInt(e.target.value);
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

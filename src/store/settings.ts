@@ -52,7 +52,11 @@ export const useSettingsStore = defineStore('settings', {
   }),
   actions: {
     changeCount(settingIndex: number, settingsItemIndex: number, count: number) {
-      this.settings[settingIndex][settingsItemIndex].count = count;
+      const countMax = 1000;
+
+      if (count <= countMax) {
+        this.settings[settingIndex][settingsItemIndex].count = count;
+      }
     },
     changeColor(settingIndex: number, settingsItemIndex: number, color: string) {
       this.settings[settingIndex][settingsItemIndex].color = color;
