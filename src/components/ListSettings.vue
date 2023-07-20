@@ -27,7 +27,6 @@ const listsStore: SettingsStore = useSettingsStore();
 const { settings } = listsStore;
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .settings {
   padding: 60px;

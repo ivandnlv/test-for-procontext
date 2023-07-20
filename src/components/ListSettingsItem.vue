@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import { SettingsStore, useSettingsStore } from '@/store/settings';
-import { toRefs, watch } from 'vue';
+import { toRefs } from 'vue';
 
 interface IListSettingsItemProps {
   title: string;
@@ -35,18 +35,11 @@ interface IListSettingsItemProps {
 }
 
 const settingsStore: SettingsStore = useSettingsStore();
-const { settings, disableMix } = settingsStore;
+const { settings } = settingsStore;
 
 const props = defineProps<IListSettingsItemProps>();
 
 const { title, settingsIndex, settingsItemIndex } = toRefs(props);
-watch(
-  settings[settingsIndex.value],
-  () => {
-    disableMix();
-  },
-  { deep: true },
-);
 </script>
 
 <style lang="scss" scoped>
@@ -57,6 +50,7 @@ watch(
   border: 1px solid #000;
   width: 500px;
   align-items: center;
+  margin-bottom: 10px;
   &-wrapper {
     display: flex;
     align-items: center;

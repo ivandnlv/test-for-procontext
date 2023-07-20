@@ -4,7 +4,7 @@
       <div class="dropdown__header">
         <div class="dropdown__title">
           <svg
-            :class="isActive ? '_active' : null"
+            :class="isActive || isSomeItemActive || allCheckBox ? '_active' : null"
             xmlns="http://www.w3.org/2000/svg"
             width="9"
             height="7"
@@ -20,18 +20,29 @@
               fill="black"
             />
           </svg>
-          <input type="checkbox" v-model="checkBox" v-if="checkboxed" />
+          <input
+            type="checkbox"
+            v-model="allCheckBox"
+            v-if="checkboxed"
+            :indeterminate="isSomeItemActive"
+          />
           <span class="dropdown__title-text">{{ title }}</span>
         </div>
 
         <MyBtn
-          v-if="isActive && withMixButton"
+          v-if="(isSomeItemActive || allCheckBox) && withMixButton"
           :title="toMix ? 'Сортировать' : 'Перемешать'"
           :on-btn-click="onMixClick"
         />
       </div>
     </div>
-    <div :class="isActive ? 'dropdown__content _active' : 'dropdown__content'">
+    <div
+      :class="
+        isActive || isSomeItemActive || allCheckBox
+          ? 'dropdown__content _active'
+          : 'dropdown__content'
+      "
+    >
       <div style="min-height: 0; position: relative">
         <slot></slot>
       </div>
@@ -52,24 +63,38 @@ interface IDropDownProps {
 }
 
 const settingsStore: SettingsStore = useSettingsStore();
-const { changeAllVisibility, changeMix } = settingsStore;
+const { changeAllVisibility, changeMix, settings } = settingsStore;
 
 const props = defineProps<IDropDownProps>();
 const { title, index, checkboxed = false, withMixButton = false } = toRefs(props);
 
-const checkBox = ref(false);
+const allCheckBox = ref(false);
 const isActive = ref(false);
 const toMix = ref(false);
+const isSomeItemActive = ref(false);
 const onDropdownClick = (e: MouseEvent) => {
   // Проверка нажатия на div или span, для того чтобы механизм dropdown
-  // не открывался при нажатии на checkbox
+  // не открывался при нажатии на checkbox или кнопку
   if (!(e.target instanceof HTMLInputElement || e.target instanceof HTMLButtonElement)) {
     isActive.value = !isActive.value;
   }
 };
 
-watch(checkBox, () => {
-  changeAllVisibility(index.value, checkBox.value);
+watch(settings[index.value], () => {
+  const optionsOnVisible = settings[index.value].filter((option) => option.visibility);
+  if (optionsOnVisible.length > 0 && optionsOnVisible.length < settings[index.value].length) {
+    isSomeItemActive.value = true;
+  } else if (optionsOnVisible.length === settings[index.value].length) {
+    isSomeItemActive.value = false;
+    allCheckBox.value = true;
+  } else {
+    isSomeItemActive.value = false;
+    allCheckBox.value = false;
+  }
+});
+
+watch(allCheckBox, () => {
+  changeAllVisibility(index.value, allCheckBox.value);
 });
 
 const onMixClick = () => {
@@ -84,20 +109,9 @@ const onMixClick = () => {
 }
 .dropdown {
   cursor: pointer;
-  position: relative;
   border: 1px solid #000;
   margin-bottom: 10px;
   padding: 10px;
-  &::before {
-    content: '';
-    position: absolute;
-    display: block;
-    width: 1px;
-    height: 1px;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-  }
   &__header {
     display: flex;
     overflow: hidden;

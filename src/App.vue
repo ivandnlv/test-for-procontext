@@ -23,5 +23,11 @@ import ListOutput from './components/ListOutput.vue';
   gap: 50px;
   width: 100%;
   height: 100vh;
+  .output {
+    flex: 1;
+  }
+  .settings {
+    flex: 1;
+  }
 }
 </style>

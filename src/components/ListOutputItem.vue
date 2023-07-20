@@ -1,79 +1,85 @@
 <template>
-  <div class="output__item" v-if="settings[settingsIndex][settingsItemIndex].visibility && !mixed">
-    <div
-      class="output__item-block"
-      v-for="(_, index) in [...Array(settings[settingsIndex][settingsItemIndex].count)]"
-      :key="index"
-      :style="{ background: settings[settingsIndex][settingsItemIndex].color }"
-    ></div>
+  <div class="output__item">
+    <div>
+      <div class="output__item-header">
+        <span>{{ title }}</span>
+        <MyBtn :title="mix[index - 1] ? 'Сортировать' : 'Перемешать'" :on-btn-click="onMixClick" />
+      </div>
+      <div class="output__item-content" v-if="isVisible && !mix[index - 1]">
+        <div style="margin-top: 20px">
+          <ListOutputBlocks
+            v-for="(_, i) in settings[index]"
+            :key="i"
+            :settings-index="index"
+            :settings-item-index="i"
+          />
+        </div>
+      </div>
+      <div class="output__item-content" v-else-if="isVisible && mix[index - 1]">
+        <div style="margin-top: 20px">
+          <ListOutputBlocks
+            :key="index"
+            :settings-index="index"
+            :settings-item-index="index"
+            mixed
+          />
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="output__item" v-else-if="mixed && mixedArr">
-    <div
-      class="output__item-block"
-      v-for="(color, index) in mixedArr"
-      :key="index"
-      :style="{ background: color }"
-    ></div>
-  </div>
-  <div v-else>Пока пусто..</div>
 </template>
 
 <script lang="ts" setup>
+import { ref, toRefs, watch } from 'vue';
 import { SettingsStore, useSettingsStore } from '@/store/settings';
-import { onMounted, ref, toRefs } from 'vue';
+import MyBtn from './UI/MyBtn.vue';
+import ListOutputBlocks from './ListOutputBlocks.vue';
 
-interface ListOutputItemProps {
-  settingsIndex: number;
-  settingsItemIndex: number;
-  mixed?: boolean;
+interface IListOutputItemProps {
+  index: number;
+  title: string;
 }
 
-const props = defineProps<ListOutputItemProps>();
+const props = defineProps<IListOutputItemProps>();
 
-const { settingsIndex, settingsItemIndex, mixed = false } = toRefs(props);
+const { index, title } = toRefs(props);
 
 const settingsStore: SettingsStore = useSettingsStore();
+const { changeMix, mix, settings } = settingsStore;
 
-const { settings } = settingsStore;
+const toMix = ref(false);
+const isVisible = ref(false);
 
-const mixedArr = ref<string[] | null>(null);
-
-const shuffleArr = (arr: string[]) => {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-};
-
-onMounted(() => {
-  if (mixed) {
-    settings[settingsIndex.value].forEach((option) => {
-      for (let i = 0; i <= option.count; i++) {
-        if (mixedArr.value?.length) {
-          mixedArr.value.push(option.color);
-        } else {
-          mixedArr.value = [option.color];
-        }
-      }
-    });
-    if (mixedArr.value) {
-      mixedArr.value = shuffleArr(mixedArr.value);
+watch(
+  settings[index.value],
+  () => {
+    const visibleOptions = settings[index.value].filter((option) => option.visibility);
+    if (visibleOptions.length) {
+      isVisible.value = true;
+    } else {
+      isVisible.value = false;
     }
-  }
-});
+  },
+  { deep: true },
+);
+
+const onMixClick = () => {
+  toMix.value = !toMix.value;
+  changeMix(index.value, toMix.value);
+};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .output__item {
-  display: flex;
   width: 100%;
-  flex-wrap: wrap;
-  gap: 2px;
+  border: 1px solid #000;
+  padding: 10px 20px;
   margin-bottom: 10px;
-  &-block {
-    width: 10px;
-    height: 10px;
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
   }
 }
 </style>
