@@ -1,24 +1,25 @@
-# test-for-procontext
+# Тестовое задание на позицию Frontend Developer (Vue.js) для компании ПроКонтекст
 
-## Project setup
-```
-npm install
-```
+Стэк: 
++ Vue 3 (script setup syntax)
++ Pinia
++ Vue Cli (Vite)
++ Scss
++ Typescript
 
-### Compiles and hot-reloads for development
+Для запуска: 
 ```
+npm install 
+
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+![image](https://github.com/ivandnlv/test-for-procontext/assets/91759945/781bd0a8-ca94-4ae4-a3bc-01eb58f059bf)
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Само задание: 
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![image](https://github.com/ivandnlv/test-for-procontext/assets/91759945/9ee7f59e-77f5-489d-8363-9eaf92cd5862)
+![image](https://github.com/ivandnlv/test-for-procontext/assets/91759945/6bc92696-11e1-4c6e-b22a-65dd4a644b6f)
+
+
+
