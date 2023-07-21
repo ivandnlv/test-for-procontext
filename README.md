@@ -14,12 +14,13 @@ npm install
 npm run serve
 ```
 
-![image](https://github.com/ivandnlv/test-for-procontext/assets/91759945/781bd0a8-ca94-4ae4-a3bc-01eb58f059bf)
+![image](https://github.com/ivandnlv/test-for-procontext/assets/91759945/b6388fdc-77b1-440f-818d-9806602ff658)
 
 ## Само задание: 
 
-![image](https://github.com/ivandnlv/test-for-procontext/assets/91759945/9ee7f59e-77f5-489d-8363-9eaf92cd5862)
-![image](https://github.com/ivandnlv/test-for-procontext/assets/91759945/6bc92696-11e1-4c6e-b22a-65dd4a644b6f)
+![image](https://github.com/ivandnlv/test-for-procontext/assets/91759945/89c75c85-9d6a-425f-938e-5d54b706bfae)
+
+![image](https://github.com/ivandnlv/test-for-procontext/assets/91759945/f2b8a1c7-a70e-483d-8fbd-bab735ebae4d)
 
 
 
