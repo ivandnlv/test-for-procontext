@@ -15,6 +15,7 @@
     <div
       class="block"
       v-for="(color, index) in mixedArr"
+      @click="() => onMixedBlockClick(color)"
       :key="index"
       :style="{ background: color }"
     ></div>
@@ -37,10 +38,14 @@ const { settingsIndex, settingsItemIndex, mixed = false } = toRefs(props);
 
 const settingsStore: SettingsStore = useSettingsStore();
 
-const { settings, deleteBlock } = settingsStore;
+const { settings, deleteBlock, deleteBlockByColor } = settingsStore;
 
 const onBlockClick = () => {
   deleteBlock(settingsIndex.value, settingsItemIndex.value);
+};
+
+const onMixedBlockClick = (color: string) => {
+  deleteBlockByColor(settingsIndex.value, color);
 };
 
 const mixedArr = ref<string[] | null>(null);

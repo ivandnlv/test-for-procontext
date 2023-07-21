@@ -13,6 +13,7 @@ interface ISettingsActions {
   changeAllVisibility: (settingsIndex: number, value: boolean) => void;
   changeMix: (settingsIndex: number, value: boolean) => void;
   deleteBlock: (settingsIndex: number, settingsItemIndex: number) => void;
+  deleteBlockByColor: (settingIndex: number, color: string) => void;
 }
 interface ISettingsState {
   settings: ISettingsItem[][];
@@ -74,6 +75,13 @@ export const useSettingsStore = defineStore('settings', {
     },
     deleteBlock(settingIndex: number, settingsItemIndex: number) {
       this.settings[settingIndex][settingsItemIndex].count -= 1;
+    },
+    deleteBlockByColor(settingIndex: number, color: string) {
+      this.settings[settingIndex].forEach((option) => {
+        if (option.color === color && option.count > 0) {
+          option.count -= 1;
+        }
+      });
     },
   },
 });
